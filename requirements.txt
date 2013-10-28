@@ -1,0 +1,7 @@
+pbr>=0.5.21,<1.0
+
+python-daemon
+python-dateutil
+ConfigParser
+kombu
+python-neutronclient
