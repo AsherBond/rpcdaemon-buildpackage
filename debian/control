@@ -1,0 +1,29 @@
+Source: rpcdaemon
+Section: net
+Priority: optional
+Maintainer: Ron Pedde <ron@pedde.com>
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8.0.0),
+ python-all (>= 2.6.6-3),
+ dh-python,
+ python-setuptools,
+ python-pbr (>= 0.5.21),
+ python-pbr (<< 1.0)
+#X-Python-Version: >= 2.6
+Homepage: https://github.com/Apsu/rpcdaemon
+Vcs-Git: https://github.com/Apsu/rpcdaemon
+Vcs-Browser: https://github.com/Apsu/rpcdaemon
+
+Package: rpcdaemon
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ python-daemon,
+ python-dateutil,
+ python-configparser,
+ python-kombu,
+ python-neutronclient
+Description: OpenStack AMQP listener daemon
+ This is an OpenStack AMQP listener daemon intended
+ for tracking and responding to OpenStack Neutron
+ agent state changes and rescheduling resources
+ appropriately.
