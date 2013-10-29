@@ -1,0 +1,41 @@
+--- a/setup.py
++++ b/setup.py
+@@ -1,9 +1,35 @@
+ #!/usr/bin/env python2
+ 
++import os
++from setuptools import setup, find_packages
+ 
+-from setuptools import setup
++def read(fname):
++    return open(os.path.join(os.path.dirname(__file__),fname)).read()
+ 
+ setup(
+-    setup_requires=['pbr'],
+-    pbr=True,
++    name = 'RPCDaemon',
++    version = '1.0.0',
++    author = 'Evan Callicoat',
++    author_email = 'apsu@propter.net',
++    description = ('An AMPQ RCP daemon, primarily for'
++                   'tracking Neutron agent state changes'),
++    license = 'Apache-2',
++    url = 'http://github.com/Apsu/rpcdaemon',
++    packages = find_packages(),
++    long_description = read('README.md'),
++    classifiers = [
++        'Development Status :: 4 - Beta',
++        'Environment :: Console',
++        'Environment :: OpenStack',
++        'Intended Audience :: Developers',
++        'Intended Audience :: Information Technology',
++        'License :: OSI Approved :: Apache Software License',
++        'Operating System :: OS Independent',
++        'Programming Language :: Python'
++        ],
++    entry_points = {
++        'console_scripts':
++            ['rpcdaemon = rpcdaemon:main']},
++
++    data_files = [('etc', ['rpcdaemon.conf'])]
+ )
