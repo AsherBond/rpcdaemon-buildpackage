@@ -1,8 +1,14 @@
-rpcdaemon (1.0.0.20131028-2) UNRELEASED; urgency=low
+rpcdaemon (1.0.0.20131028-3) unstable; urgency=low
+
+  * remove dep on python-configparser, as is py3 dep
+
+ -- Ron Pedde <ron@pedde.com>  Tue, 29 Oct 2013 16:03:23 -0500
+
+rpcdaemon (1.0.0.20131028-2) unstable; urgency=low
 
   * switch to python-support vs dh-python, for wheezy
 
- -- Ron Pedde <ron@pedde.com>  Tue, 29 Oct 2013 11:26:57 -0500
+ -- Ron Pedde <ron@pedde.com>  Tue, 29 Oct 2013 16:04:57 -0500
 
 rpcdaemon (1.0.0.20131028-1) unstable; urgency=low
 

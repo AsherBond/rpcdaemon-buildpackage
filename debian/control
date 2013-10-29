@@ -17,7 +17,6 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
  python-daemon,
  python-dateutil,
- python-configparser,
  python-kombu,
  python-neutronclient
 Description: OpenStack AMQP listener daemon
