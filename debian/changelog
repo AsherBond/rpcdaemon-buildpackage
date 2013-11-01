@@ -1,3 +1,9 @@
+rpcdaemon (1.0.0.20131028-5) unstable; urgency=low
+
+  * add init script
+
+ -- Ron Pedde <ron@pedde.com>  Fri, 01 Nov 2013 16:33:02 -0500
+
 rpcdaemon (1.0.0.20131028-4) unstable; urgency=low
 
   * add patches for -c cli option
