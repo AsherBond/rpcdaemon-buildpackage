@@ -2,6 +2,8 @@
 
 # General
 import sys
+import getopt
+import logging
 from time import sleep
 from signal import signal, getsignal, SIGTERM, SIGINT
 
@@ -23,12 +25,27 @@ from rpcdaemon.lib.pidfile import PIDFile
 
 # Consumer worker
 class Worker(ConsumerMixin, Thread):
-    def __init__(self, connection, plugins=[]):
+    def __init__(self, connection, plugins=[], handler=None):
         Thread.__init__(self, target=self.run)  # MRO picks mixin.run
         self.connection = connection
+        self.is_connected = True
         self.plugins = plugins
         self.queues = [plugin.queue for plugin in plugins]
         self.callbacks = [plugin.update for plugin in plugins]
+        self.logger = Logger(name='consumer',
+                             handler=handler)
+
+    def on_connection_error(self, exc, interval):
+        self.is_connected = False
+        if self.should_stop:
+            self.logger.warn('Disconnected AMQP')
+        else:
+            self.logger.warn('Retrying AMQP connection')
+            self.connection.ensure_connection()
+
+    def on_connection_revived(self):
+        self.logger.warn('AMQP connection re-established')
+        self.is_connected = True
 
     def get_consumers(self, Consumer, channel):
         return [
@@ -39,19 +56,29 @@ class Worker(ConsumerMixin, Thread):
 
 # State monitor
 class Monitor(DaemonContext):
-    def __init__(self):
+    def __init__(self, args=None):
+        # Parse args
+        if args is None:
+            args = {}
+
+        options, _ = getopt.getopt(sys.argv[1:], 'c:d')
+        options = dict(options)
+
+        config_file = options.get('-c', '/usr/local/etc/rpcdaemon.conf')
+        daemonize = '-d' not in options
+
         # Parse config
-        self.config = Config('/usr/local/etc/rpcdaemon.conf', 'Daemon')
+        self.config = Config(config_file, 'Daemon')
 
         # Initialize logger
         self.logger = Logger(
             name='rpcdaemon',
-            level=self.config['loglevel'],
-            path='/var/log/rpcdaemon.log'
+            level = self.config['loglevel'],
+            path = self.config['logfile'] if daemonize else None,
+            handler = None if daemonize else logging.StreamHandler()
         )
 
-        # PID lockfile
-        self.pidfile = PIDFile('/var/run/rpcdaemon.pid')
+        self.pidfile = PIDFile(self.config['pidfile']) if daemonize else None;
 
         # TOOD: plugin.check thread pool?
         self.timeout = 1
@@ -62,17 +89,16 @@ class Monitor(DaemonContext):
         # Initialize daemon
         DaemonContext.__init__(
             self,
-            detach_process=True,
-            files_preserve=[self.logger.handler.stream],
-            pidfile=self.pidfile
+            detach_process=daemonize,
+            files_preserve=[self.logger.handler.stream.fileno()],
+            pidfile=self.pidfile,
+            stdout=self.logger.handler.stream,
+            stderr=self.logger.handler.stream
         )
 
     def open(self):
         # Call super
         DaemonContext.open(self)
-
-        # Log stdout/stderr for tracebacks and such
-        sys.stdout = sys.stderr = self.logger.handler.stream
 
         # Needfuls.doit()
         self.logger.info('Initializing...')
@@ -97,14 +123,17 @@ class Monitor(DaemonContext):
 
         # Setup worker with plugins and crank it up
         self.logger.info('Starting worker...')
-        self.worker = Worker(self.connection, self.plugins)
+        self.worker = Worker(self.connection, self.plugins,
+                             handler=self.logger.handler)
         self.worker.daemon = True  # Daemon thread
         self.worker.start()
         self.logger.info('Started.')
 
     def check(self):
-        for plugin in self.plugins:
-            plugin.check()
+        if self.worker.is_connected:
+            self.logger.debug('Dispatching plugin checks...')
+            for plugin in self.plugins:
+                plugin.check()
 
     def close(self):
         # We might get called more than once, or before worker exists
@@ -123,9 +152,8 @@ class Monitor(DaemonContext):
 
 # Entry point
 def main():
-    with Monitor() as monitor:
+    with Monitor(sys.argv[1:]) as monitor:
         while monitor.worker.is_alive():
-            monitor.logger.debug('Dispatching plugin checks...')
             monitor.check()
             # TODO: plugin.check thread pool?
             sleep(monitor.timeout)
