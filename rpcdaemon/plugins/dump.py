@@ -1,4 +1,5 @@
 # General
+from uuid import uuid4
 import json
 
 # RPC superclass
@@ -41,6 +42,16 @@ class Dump(RPC):
             }
         )
 
+    def check(self):
+        pass
+
     def update(self, body, message):
-        self.logger.debug(json.dumps(body, indent=2, sort_keys=True))
+        if 'oslo.message' in body:
+            body = json.loads(body['oslo.message'])
+
+        filter_string = self.config._config.get('filter', 'True')
+
+        if eval(filter_string):
+            self.logger.debug(json.dumps(body, indent=2, sort_keys=True))
+
         message.ack()
