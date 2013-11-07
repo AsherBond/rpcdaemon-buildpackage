@@ -1,3 +1,9 @@
+rpcdaemon (1.0.0.20131107-1) unstable; urgency=low
+
+   * Bump version to latest
+
+ -- Ron Pedde <ron@pedde.com>  Thu, 07 Nov 2013 14:09:24 -0600
+
 rpcdaemon (1.0.0.20131028-6) unstable; urgency=low
 
   * add patch for oslo-wrapped rpc messages
