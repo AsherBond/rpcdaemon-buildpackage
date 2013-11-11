@@ -1,0 +1,39 @@
+diff --git a/rpcdaemon/lib/pidfile.py b/rpcdaemon/lib/pidfile.py
+index 4185a5d..33b24a4 100644
+--- a/rpcdaemon/lib/pidfile.py
++++ b/rpcdaemon/lib/pidfile.py
+@@ -29,7 +29,7 @@ class PIDFile():
+ 
+         return self
+ 
+-    def __exit__(self, exc_type, exc_val, exc_tb):
++    def __exit__(self, *args, **kwargs):
+         # If pidfile exists here we wrote it; kill it
+         if os.path.exists(self.path):
+             os.remove(self.path)
+diff --git a/rpcdaemon/plugins/dhcpagent.py b/rpcdaemon/plugins/dhcpagent.py
+index c6995ea..6e167fb 100644
+--- a/rpcdaemon/plugins/dhcpagent.py
++++ b/rpcdaemon/plugins/dhcpagent.py
+@@ -82,7 +82,7 @@ class DHCPAgent(NeutronAgent, RPC):
+ 
+         # Get all networks
+         networks = dict([(network['id'], network)
+-                         for networks in
++                         for network in
+                          self.client.list_networks()['networks']])
+ 
+         self.logger.debug('All Networks: %s' % networks.keys())
+diff --git a/rpcdaemon/plugins/l3agent.py b/rpcdaemon/plugins/l3agent.py
+index 86eafa5..1289ec0 100644
+--- a/rpcdaemon/plugins/l3agent.py
++++ b/rpcdaemon/plugins/l3agent.py
+@@ -81,7 +81,7 @@ class L3Agent(NeutronAgent, RPC):
+         # Get routers on agents
+         binds = dict([(router['id'], router) for target in targets
+                       for router in
+-                      self.client.list_routers_on_l3_agents(target)['routers']])
++                      self.client.list_routers_on_l3_agent(target)['routers']])
+ 
+         self.logger.debug('Bound Routers: %s' % binds.keys())
+ 

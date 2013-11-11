@@ -1,3 +1,9 @@
+rpcdaemon (1.0.0.20131111-2) UNRELEASED; urgency=low
+
+  * add typo patches and fix for pidfile context
+
+ -- Ron Pedde <ron@pedde.com>  Mon, 11 Nov 2013 14:02:15 -0600
+
 rpcdaemon (1.0.0.20131111-1) unstable; urgency=low
 
   * bump version to latest
