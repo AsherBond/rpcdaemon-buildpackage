@@ -1,3 +1,9 @@
+rpcdaemon (1.0.0.20131111-1) unstable; urgency=low
+
+  * bump version to latest
+
+ -- Ron Pedde <ron@pedde.com>  Mon, 11 Nov 2013 12:12:21 -0600
+
 rpcdaemon (1.0.0.20131107-1) unstable; urgency=low
 
    * Bump version to latest
