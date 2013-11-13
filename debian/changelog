@@ -1,3 +1,10 @@
+rpcdaemon (1.0.0.20131113-1) unstable; urgency=low
+
+  * bump to new upstream.  Add x-expires to queues
+  * fold in previous patches
+
+ -- Ron Pedde <ron@pedde.com>  Wed, 13 Nov 2013 10:27:14 -0600
+
 rpcdaemon (1.0.0.20131111-3) unstable; urgency=low
 
   * add patches to ignore neutron exceptions
