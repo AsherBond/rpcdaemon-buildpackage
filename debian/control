@@ -18,7 +18,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  python-daemon,
  python-dateutil,
  python-kombu,
- python-neutronclient
+ python-neutronclient | python-quantumclient
 Description: OpenStack AMQP listener daemon
  This is an OpenStack AMQP listener daemon intended
  for tracking and responding to OpenStack Neutron
