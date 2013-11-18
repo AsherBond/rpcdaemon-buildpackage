@@ -1,3 +1,9 @@
+rpcdaemon (1.0.0.20131118-1) unstable; urgency=low
+
+  * new upstream.  automatically select correct event queue
+
+ -- Ron Pedde <ron@pedde.com>  Mon, 18 Nov 2013 14:15:43 -0600
+
 rpcdaemon (1.0.0.20131113-2) unstable; urgency=low
 
   * satisfy runtime deps on either neutron or quantumclient
