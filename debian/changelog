@@ -1,3 +1,10 @@
+rpcdaemon (1.0.0.20131125-1) unstable; urgency=low
+
+  * new upstream
+  * quieter logging, retry quantum actions
+
+ -- Ron Pedde <ron@pedde.com>  Mon, 25 Nov 2013 13:02:28 -0600
+
 rpcdaemon (1.0.0.20131118-1) unstable; urgency=low
 
   * new upstream.  automatically select correct event queue
